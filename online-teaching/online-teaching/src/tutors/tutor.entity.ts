@@ -1,5 +1,6 @@
 import {Model,Table,Column,DataType, HasMany} from 'sequelize-typescript'
 import { Course } from 'src/courses/course.entity';
+import { Token } from 'src/tokens/token.entity';
 
 @Table
 export class Tutor extends Model {
@@ -38,4 +39,7 @@ export class Tutor extends Model {
 
     @HasMany(()=>Course)
     courses: Course[];
+
+    @HasMany(()=>Token)
+    tokens: Token[];
 }

@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post,Request, UseGuards } from "@nestjs/common";
 import { IsEmail } from "sequelize-typescript";
 import { courseProvider } from "src/courses/course.provider";
 import { TutorDto } from "./dto/tutor.dto";
 import { TutorService } from "./tutor.service";
 import {CourseDto} from '../courses/dto/course.dto'
+import { AuthService } from "src/auth/auth.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('tutors')
 export class TutorController{

@@ -1,6 +1,6 @@
 import { CustomerTerm } from './customer_term.entity';
 
-export const courseProvider = [
+export const customerTermsProvider = [
     {
       provide: 'CUSTOMERTERMS_REPOSITORY',
       useValue: CustomerTerm,
