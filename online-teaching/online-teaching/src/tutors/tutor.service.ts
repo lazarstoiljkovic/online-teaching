@@ -20,6 +20,18 @@ export class TutorService{
         return this.tutorsRepository.findAll();
     }
 
+    async updateTutor(id:number,tutorDto:TutorDto){
+        return await this.tutorsRepository.update({...tutorDto},{
+            where:{id}
+        });
+    }
+
+    async deleteTutor(id:number){
+        return await this.tutorsRepository.destroy({
+            where:{id}
+        });
+    }
+
     async create(tutorDto:TutorDto):Promise<Tutor>{
         const tutor=await this.tutorsRepository.create(tutorDto);
         //await this.addTokenForTutor(new TokenDto(token,tutor.id));

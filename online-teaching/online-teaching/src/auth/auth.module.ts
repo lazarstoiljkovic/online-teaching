@@ -6,9 +6,11 @@ import { LocalStrategy } from "./local.strategy";
 import { JwtModule,JwtService } from '@nestjs/jwt';
 import { AuthController } from "./auth.controller";
 import { JwtStrategy } from "./jwt.strategy";
+import { CustomerModule } from "src/customers/customer.module";
 
 @Module({
     imports:[TutorModule,
+        CustomerModule,
         PassportModule,
         JwtModule.register({
         secret:'secret-key',

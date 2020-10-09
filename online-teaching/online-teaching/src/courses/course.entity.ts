@@ -1,14 +1,8 @@
-import {Model,Table,Column,DataType,HasOne, ForeignKey, PrimaryKey} from 'sequelize-typescript'
+import {Model,Table,Column,DataType,HasOne, ForeignKey, PrimaryKey, BelongsTo} from 'sequelize-typescript'
 import {Tutor} from '../tutors/tutor.entity'
 
 @Table
 export class Course extends Model {
-    @Column({
-        type: DataType.STRING,
-        allowNull:false,
-        unique:true
-    })
-    courseId:string;
 
     @Column({
         type: DataType.STRING,
@@ -22,6 +16,8 @@ export class Course extends Model {
     })
     maxNumberOfCustomers:number;
 
+    @BelongsTo(()=>Tutor)
+    tutor:Tutor;
 
     @ForeignKey(()=>Tutor)
     @Column

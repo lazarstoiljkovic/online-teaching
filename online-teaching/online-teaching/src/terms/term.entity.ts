@@ -5,12 +5,6 @@ import { CustomerTerm } from 'src/customer_terms/customer_term.entity';
 
 @Table
 export class Term extends Model{
-    @Column({
-        type:DataType.STRING,
-        allowNull:false,
-        unique:true
-    })
-    termId:string;
 
     @Column({
         type:DataType.DATE,

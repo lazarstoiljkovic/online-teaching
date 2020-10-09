@@ -23,4 +23,5 @@ export class CustomerTerm extends Model{
     termId:number;
 
 
+
 }

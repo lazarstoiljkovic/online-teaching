@@ -4,24 +4,6 @@ import { Term } from 'src/terms/term.entity';
 
 @Table
 export class Customer extends Model {
-    @Column({
-        type: DataType.STRING,
-        allowNull:false,
-    })
-    firstName:string;
-
-    @Column({
-        type: DataType.STRING,
-        allowNull:false,
-    })
-    lastName:string;
-
-    @Column({
-        type: DataType.STRING,
-        unique:true,
-        allowNull:false,
-    })
-    username:string;
 
     @Column({
         type: DataType.STRING,
@@ -36,6 +18,11 @@ export class Customer extends Model {
         allowNull:false,
     })
     password:string;
+
+    @Column({
+        type:DataType.BOOLEAN
+    })
+    validEmail:boolean;
 
     @BelongsToMany(()=>Term,()=>CustomerTerm)
     terms:Term[];

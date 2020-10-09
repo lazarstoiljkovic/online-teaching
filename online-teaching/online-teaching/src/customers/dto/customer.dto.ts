@@ -1,17 +1,14 @@
-export class CustomerDto{
-    firstName:string;
-    lastName:string;
-    email:string;
-    username:string;
-    password:string;
-    //additional properties if necessary
+import { IsNotEmpty, MinLength, IsEmail, IsEnum,MaxLength } from 'class-validator';
 
-    constructor(firstName:string,lastName:string,email:string,username:string,password:string){
-        this.firstName=firstName;
-        this.lastName=lastName;
-        this.email=email;
-        this.username=username;
-        this.password=password;
-    }
+export class CustomerDto{
+    @IsNotEmpty()
+    @IsEmail()
+    email:string;
+    @IsNotEmpty()
+    @MinLength(6)
+    @MaxLength(30)
+    password:string;
+    validEmail:boolean;
+    //additional properties if necessary
     
 }
