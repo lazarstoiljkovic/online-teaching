@@ -7,6 +7,7 @@ import { DoesUserExist } from './guards/doesUserExist.guard';
 import { TutorService } from 'src/tutors/tutor.service';
 import { CustomerService } from 'src/customers/customer.service';
 import { CustomerDto } from 'src/customers/dto/customer.dto';
+import { UserDto } from 'src/users/dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,10 +16,17 @@ export class AuthController {
     @UseGuards(AuthGuard('local'))
     @Post('login')
     async login(@Request() req) {
-        //console.log(req);
         console.log(req.user);
         return await this.authService.login(req.user);
     }
+
+    @UseGuards(DoesUserExist)
+    @Post('signup')
+    async signUp(
+        @Body() user:UserDto) {
+            return this.authService.signup(user);
+    }
+
 
     
     @Post('customerSignUp')
@@ -53,13 +61,6 @@ export class AuthController {
         return await this.authService.verifyEmail(params.email);
     }
 
-    @UseGuards(DoesUserExist)
-    @Post('signup')
-    async signUp(
-        @Body() tutor:TutorDto) {
-            //const tutor=new TutorDto(firstName,lastName,email,username,password);
-            return await this.authService.signup(tutor);
-    }
 
 
     //protect rooutes from non authorized users with jwt strategy

@@ -2,6 +2,7 @@ import { Model, Table, Column, DataType, HasMany, BelongsTo, ForeignKey, Belongs
 import { Course } from 'src/courses/course.entity';
 import { Customer } from 'src/customers/customer.entity';
 import { CustomerTerm } from 'src/customer_terms/customer_term.entity';
+import { User } from 'src/users/user.entity';
 
 @Table
 export class Term extends Model {
@@ -30,12 +31,18 @@ export class Term extends Model {
     })
     currentCustomersOnCourse: number;
 
-    @BelongsTo(() => Course)
+    @BelongsTo(() => Course,{onDelete:'cascade'})
     courseTerm: Course;
 
     @ForeignKey(() => Course)
     courseId: number;
 
-    @BelongsToMany(() => Customer, () => CustomerTerm)
-    customers: Customer[];
+    @BelongsTo(()=>User,{onDelete:'cascade'})
+    tutor:User;
+
+    @ForeignKey(()=>User)
+    tutorId:number;
+
+    @BelongsToMany(() => User, () => CustomerTerm)
+    customers: User[];
 }

@@ -6,6 +6,7 @@ import { CustomerTerm } from 'src/customer_terms/customer_term.entity';
 import { Term } from 'src/terms/term.entity';
 import { Token } from 'src/tokens/token.entity';
 import { TutorDto } from 'src/tutors/dto/tutor.dto';
+import { User } from 'src/users/user.entity';
 import { Tutor } from '../tutors/tutor.entity';
 
 export const databaseProviders=[{
@@ -20,7 +21,7 @@ export const databaseProviders=[{
             password: 'lazarncoded',
             database: 'test',
         });
-        sequelize.addModels([Tutor,Course,Customer,Term,CustomerTerm,Token]);
+        sequelize.addModels([User,Course,Term,CustomerTerm]);
         await sequelize.sync();
         return sequelize;
     },

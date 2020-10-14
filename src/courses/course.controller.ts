@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Request, UseGuards,Query } from "@nestjs/common";
+import { PaginationDto } from "src/auth/dto/pagination.dto";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { ModelInstnaceAccessGurad } from "src/auth/guards/modelInstanceAccess.guard";
 import { courseProvider } from "./course.provider";
 import { CourseService } from "./course.service";
 import { CourseDto } from "./dto/course.dto";
@@ -10,8 +12,11 @@ export class CourseController{
 
     @UseGuards(JwtAuthGuard)
     @Get()
-    findAll(){
-        return this.courseService.findAllCourses();
+    findAll(@Query() paginationDto: PaginationDto){
+        paginationDto.page = Number(paginationDto.page);
+        paginationDto.limit = Number(paginationDto.limit);
+
+        return this.courseService.findAllCourses(paginationDto);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -37,17 +42,19 @@ export class CourseController{
             return await this.courseService.createCourse(course,req.user.id);
     }
 
+    //middleware(guard) for model instance access authorization
+    @UseGuards(ModelInstnaceAccessGurad)
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id') id: number, @Body() course: CourseDto, @Request() req){
-        const updatedCourse = await this.courseService.updateCourse(id, course, req.user.id);
+    async update(@Param('id') id: number, @Body() course: CourseDto){
+/*         const updatedCourse = await this.courseService.updateCourse(id, course, req.user.id);
 
         if (updatedCourse[0]===0) {
             throw new NotFoundException('This course doesnt exist');
         }
 
 
-        return updatedCourse;
+        return updatedCourse; */
     }
 
     @UseGuards(JwtAuthGuard)

@@ -8,29 +8,31 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenDto } from "src/tokens/dto/token.dto";
 import { CustomerService } from "src/customers/customer.service";
 import { CustomerDto } from "src/customers/dto/customer.dto";
+import { UserService } from "src/users/user.service";
 @Injectable()
 export class AuthService{
     constructor(private readonly tutorService:TutorService,
         private readonly customerService:CustomerService,
-        private readonly jwtService: JwtService){
+        private readonly jwtService: JwtService,
+        private readonly userService:UserService){
 
     }
 
-    async validateTutor(username:string,pass:string): Promise<any>{
-        const tutor=await this.tutorService.getTutorByUsername(username);
+    async validateUser(username:string,pass:string): Promise<any>{
+        const user=await this.userService.getUserByUsername(username);
         //console.log(tutor);
-        if(!tutor){
+        if(!user){
             return null;
         }
 
-        const com=await this.comparePassword(pass,tutor.password);
+        const com=await this.comparePassword(pass,user.password);
 
 
         if(!com){
             return null;
         }
 
-        const {password,...result}=tutor;
+        const {password,...result}=user;
 
         return result;
 
@@ -47,8 +49,8 @@ export class AuthService{
         const newTutor=tutor.dataValues;
         //console.log(newTutor);
         const token=await this.generateToken(newTutor);
-        const tokenDto=new TokenDto(token,newTutor.id);
-        this.tutorService.addTokenForTutor(tokenDto);
+        //const tokenDto=new TokenDto(token,newTutor.id);
+        //this.tutorService.addTokenForTutor(tokenDto);
         return {token};
     }
 
@@ -82,25 +84,19 @@ export class AuthService{
     }
 
     public async signup(tutor){
-/*         const hashedPassword=await this.hashPassword(tutor.password);
-        const newTutor={...tutor,password:hashedPassword};
-        console.log(newTutor);
-        await this.tutorService.create(newTutor);
-        const {password,...result}=newTutor;
-        const token = await this.generateToken(result); */
 
         this.hashPassword(tutor.password).then(async (res)=>{
             //console.log(res);
             const newTutor={...tutor, password:res};
-            console.log(newTutor);
-            await this.tutorService.create(newTutor);
-            const tutor1=await this.tutorService.getTutorByUsername(newTutor.username);
-            const {password,...result}=newTutor;
-            const token=await this.generateToken(result);
-            const tokenDto=new TokenDto(token,tutor1.id);
-            await this.tutorService.addTokenForTutor(tokenDto);
+            //console.log(newTutor);
+            await this.userService.createUser(newTutor);
+            //const tutor1=await this.userService.getUserByUsername(newTutor.username);
+            //const {password,...result}=newTutor;
+            //const token=await this.generateToken(result);
+            //const tokenDto=new TokenDto(token,tutor1.id);
+            //await this.tutorService.addTokenForTutor(tokenDto);
 
-            return {tutor:result,token};
+            return {tutor:newTutor};
             
         }).catch((error)=>{
             return 'error';
@@ -109,9 +105,9 @@ export class AuthService{
     }
 
     private async hashPassword(password){
-        console.log(password);
+        //console.log(password);
         const hash = await bcrypt.hash(password,10);
-        console.log(hash);
+        //console.log(hash);
         return hash;
     }
 

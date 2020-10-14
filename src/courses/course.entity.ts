@@ -1,4 +1,5 @@
 import { Model, Table, Column, DataType, HasOne, ForeignKey, PrimaryKey, BelongsTo } from 'sequelize-typescript'
+import { User } from 'src/users/user.entity';
 import { Tutor } from '../tutors/tutor.entity'
 
 @Table
@@ -12,14 +13,15 @@ export class Course extends Model {
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: false,
+        defaultValue:0,
+        allowNull: false
     })
     maxNumberOfCustomers: number;
 
-    @BelongsTo(() => Tutor)
-    tutor: Tutor;
+    @BelongsTo(() => User,{onDelete:'cascade'})
+    tutor: User;
 
-    @ForeignKey(() => Tutor)
+    @ForeignKey(() => User)
     @Column
     tutorId: number;
 }

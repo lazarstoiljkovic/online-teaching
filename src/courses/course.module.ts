@@ -4,6 +4,7 @@ import {CourseController} from './course.controller';
 import { courseProvider } from "./course.provider";
 import { CourseService } from "./course.service";
 
+
 @Module({
     imports:[DatabaseModule],
     controllers:[CourseController],

@@ -1,11 +1,15 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { PaginationDto } from "src/auth/dto/pagination.dto";
 import { Tutor } from "src/tutors/tutor.entity";
+import { User } from "src/users/user.entity";
 import { Course } from "./course.entity";
 import { CourseDto } from "./dto/course.dto";
 
+
 @Injectable()
 export class CourseService{
-    constructor(@Inject('COURSES_REPOSITORY') private readonly courseRepository: typeof Course){
+    constructor(
+        @Inject('COURSES_REPOSITORY') private readonly courseRepository: typeof Course){
 
     }
 
@@ -18,7 +22,7 @@ export class CourseService{
         return await this.courseRepository.findAll({
             where:{tutorId},
             include:[{
-                model:Tutor,
+                model:User,
                 attributes:{
                     exclude:['password']
                 }
@@ -26,10 +30,15 @@ export class CourseService{
         })
     }
 
-    async findAllCourses():Promise<Course[]>{
-        return await this.courseRepository.findAll({
+    async findAllCourses(paginationDto:PaginationDto):Promise<Course[]>{
+
+        const skippedItems=(paginationDto.page-1)*paginationDto.limit;
+
+        return this.courseRepository.findAll({
+            limit:paginationDto.limit,
+            offset:skippedItems,
             include:[{
-                model:Tutor,
+                model:User,
                 attributes:{
                     exclude:['password']
                 }
@@ -41,7 +50,7 @@ export class CourseService{
         return await this.courseRepository.findOne({
             where: {id},
             include:[{
-                model:Tutor,
+                model:User,
                 attributes:{
                     exclude:['password']
                 }
