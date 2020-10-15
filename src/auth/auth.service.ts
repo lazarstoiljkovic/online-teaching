@@ -20,7 +20,6 @@ export class AuthService{
 
     async validateUser(username:string,pass:string): Promise<any>{
         const user=await this.userService.getUserByUsername(username);
-        //console.log(tutor);
         if(!user){
             return null;
         }
@@ -47,67 +46,38 @@ export class AuthService{
     public async login(tutor){
 
         const newTutor=tutor.dataValues;
-        //console.log(newTutor);
         const token=await this.generateToken(newTutor);
-        //const tokenDto=new TokenDto(token,newTutor.id);
-        //this.tutorService.addTokenForTutor(tokenDto);
-        return {token};
-    }
-
-    public async loginCustomer(customer){
-        const newCustomer=customer.dataValues;
-        const token=await this.generateToken(newCustomer);
 
         return {token};
     }
 
 
     private async generateToken(tutor) {
-        //console.log(tutor);
         const token = await this.jwtService.signAsync(tutor);
         console.log(token);
         return token;
     }
 
-    public async registerCustomer(customer:CustomerDto){
-        this.hashPassword(customer.password).then(async (res)=>{
-            const newCustomer={...customer,password:res};
-            await this.customerService.createCustomer(newCustomer);
-            //const customer1=await this.customerService.getCustomerByEmail(newCustomer.email);
-            const {password,...result}=newCustomer;
-            const token=await this.generateToken(result);
-
-            return {customer:result,token};
-        }).catch((error)=>{
-            return 'error';
-        })
-    }
-
     public async signup(tutor){
 
-        this.hashPassword(tutor.password).then(async (res)=>{
-            //console.log(res);
+        const user=this.hashPassword(tutor.password).then(async (res)=>{
             const newTutor={...tutor, password:res};
-            //console.log(newTutor);
             await this.userService.createUser(newTutor);
-            //const tutor1=await this.userService.getUserByUsername(newTutor.username);
-            //const {password,...result}=newTutor;
-            //const token=await this.generateToken(result);
-            //const tokenDto=new TokenDto(token,tutor1.id);
-            //await this.tutorService.addTokenForTutor(tokenDto);
+            const {password,...result}=newTutor;
+            const token=await this.generateToken(result);
 
-            return {tutor:newTutor};
+            return {...newTutor,token};
             
         }).catch((error)=>{
             return 'error';
         });
+
+        return user;
         
     }
 
     private async hashPassword(password){
-        //console.log(password);
         const hash = await bcrypt.hash(password,10);
-        //console.log(hash);
         return hash;
     }
 
@@ -117,8 +87,8 @@ export class AuthService{
             port: 587,
             secure: false,
             auth: {
-                user: 'flavie.wolf10@ethereal.email',
-                pass: 'nee3j6ugKDvrBnPQhv'
+                user: 'jalyn95@ethereal.email',
+                pass: '6Jkc8qj9Y3rXVErjrn'
             }
         });
     
@@ -146,7 +116,7 @@ export class AuthService{
     }
 
     async verifyEmail(email:string){
-        const customer=await this.customerService.getCustomerByEmail(email);
+        const customer=await this.userService.getUserByEmail(email);
         customer.validEmail=true;
         const savedCustomer=await customer.save();
 

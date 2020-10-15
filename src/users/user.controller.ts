@@ -1,5 +1,6 @@
-import { Controller, Get, NotFoundException, Param, UseGuards,Body,Put,Delete } from "@nestjs/common";
+import { Controller, Get, NotFoundException, Param, UseGuards,Body,Put,Delete, Query } from "@nestjs/common";
 import { Roles } from "src/auth/decorators/roles.decorator";
+import { PaginationDto } from "src/auth/dto/pagination.dto";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { RolesGuard } from "src/auth/guards/roles.guard";
 import { UserDto } from "./dto/user.dto";
@@ -17,16 +18,14 @@ export class UserController{
         return this.userService.getAllUsers();
     }
 
-/*     @UseGuards(JwtAuthGuard)
-    @Get('tutor/:username')
-    async findById(@Param('username') username){
-        const tutor=await this.tutorService.getTutorByUsername(username);
-        if(!tutor){
-            throw new NotFoundException('This tutor doesnt exist');
-        }
+    @UseGuards(JwtAuthGuard)
+    @Get('/tutors')
+    async findAllTutors(@Query() paginationDto:PaginationDto){
+        paginationDto.page=Number(paginationDto.page);;
+        paginationDto.limit=Number(paginationDto.limit);
 
-        return tutor;
-    } */
+        return this.userService.getAllTutors(paginationDto);
+    }
 
     @UseGuards(JwtAuthGuard)
     @Get('/:id')
@@ -39,6 +38,7 @@ export class UserController{
 
         return user;
     }
+
     @Roles('admin')
     @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
@@ -54,6 +54,8 @@ export class UserController{
 
     }
 
+    @Roles('admin')
+    @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
     @Delete('/:id')
     async deleteUser(

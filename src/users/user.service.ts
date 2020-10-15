@@ -1,4 +1,5 @@
 import { Inject } from "@nestjs/common";
+import { PaginationDto } from "src/auth/dto/pagination.dto";
 import { Course } from "src/courses/course.entity";
 import { UserDto } from "./dto/user.dto";
 import { User } from "./user.entity";
@@ -13,6 +14,18 @@ export class UserService{
 
     async getAllUsers():Promise<User[]>{
         return this.usersRepository.findAll();
+    }
+
+    async getAllTutors(paginationDto:PaginationDto):Promise<User[]>{
+        const skippedItems=(paginationDto.page-1)*paginationDto.limit;
+
+        return this.usersRepository.findAll({
+            limit:paginationDto.limit,
+            offset:skippedItems,
+            where:{
+                role:'tutor'
+            }
+        })
     }
 
     async createUser(userDto:UserDto):Promise<User>{

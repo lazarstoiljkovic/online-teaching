@@ -10,16 +10,27 @@ export class ModelInstnaceAccessGurad implements CanActivate{
 
     }
 
-    canActivate(context:ExecutionContext):boolean|Promise<boolean>|Observable<boolean>{
+    async canActivate(context:ExecutionContext):Promise<boolean>{
 
 
         const request:any=context.switchToHttp().getRequest<Request>();
         const result=request.user;
         const param=request.params.id;
-        //console.log(result);
-        //console.log(param);
+        console.log(result);
+        console.log(param);
 
-        const res=this.courseService.findOne(param).then((course)=>{
+        const res=await this.courseService.findOne(param);
+        console.log(res);
+        if(res.tutorId===result.id){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+
+        //ne moze ovo ovako za terms
+/*         const res=this.courseService.findOne(param).then((course)=>{
             console.log(course.tutorId);
             console.log(result.id);        
             if(course.tutorId===result.id){
@@ -33,9 +44,8 @@ export class ModelInstnaceAccessGurad implements CanActivate{
         })
 
 
+        console.log(res);
 
-
-
-        return res;
+        return res; */
     }
 }

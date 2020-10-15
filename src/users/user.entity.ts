@@ -53,6 +53,12 @@ export class User extends Model {
     role:UserRole;
 
     @Column({
+        type:DataType.BOOLEAN,
+        defaultValue:false
+    })
+    validEmail:boolean;
+
+    @Column({
         type:DataType.STRING(1024),
         defaultValue:'undefined'
     })

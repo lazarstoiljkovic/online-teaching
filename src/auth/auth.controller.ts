@@ -8,6 +8,7 @@ import { TutorService } from 'src/tutors/tutor.service';
 import { CustomerService } from 'src/customers/customer.service';
 import { CustomerDto } from 'src/customers/dto/customer.dto';
 import { UserDto } from 'src/users/dto/user.dto';
+import { UserRole } from 'src/users/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -24,49 +25,24 @@ export class AuthController {
     @Post('signup')
     async signUp(
         @Body() user:UserDto) {
-            return this.authService.signup(user);
-    }
-
-
-    
-    @Post('customerSignUp')
-    async signupCustomer(
-        @Body() customerDto:CustomerDto){
-            try{
-                customerDto.validEmail=false;
-                await this.authService.registerCustomer(customerDto);
-                const sent=this.authService.sendEmailVerification(customerDto.email);
+            const result:any=await this.authService.signup(user);
+            console.log(result);
+            if(result.role===UserRole.CUSTOMER){
+                const sent=this.authService.sendEmailVerification(result.email);
                 if(sent){
-                    return "User Registered successfully"; 
+                    return result;
                 }
                 else
                 {
-                    return "Registration failed. Mail not sent"
+                    return 'Registration failed. Mail not sent'
                 }
             }
-            catch(error){
-                return error;
-            }
-    }
 
-    @UseGuards(AuthGuard('local'))
-    @Post('customerLogin')
-    async customerLogin(@Request() req){
-        return await this.authService.loginCustomer(req.user);
+            return result;
     }
-
 
     @Get('email/verify/:email')
     async verifyEmail(@Param() params){
         return await this.authService.verifyEmail(params.email);
-    }
-
-
-
-    //protect rooutes from non authorized users with jwt strategy
-    @UseGuards(JwtAuthGuard)
-    @Get('Profile')
-    getProfile(@Request() req){
-        return req.user;
     }
 }

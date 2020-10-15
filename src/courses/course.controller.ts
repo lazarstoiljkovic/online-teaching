@@ -1,7 +1,10 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Request, UseGuards,Query } from "@nestjs/common";
+import { Roles } from "src/auth/decorators/roles.decorator";
 import { PaginationDto } from "src/auth/dto/pagination.dto";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { ModelInstnaceAccessGurad } from "src/auth/guards/modelInstanceAccess.guard";
+import { RolesGuard } from "src/auth/guards/roles.guard";
+import { tutorProvider } from "src/tutors/tutor.provider";
 import { courseProvider } from "./course.provider";
 import { CourseService } from "./course.service";
 import { CourseDto } from "./dto/course.dto";
@@ -20,6 +23,13 @@ export class CourseController{
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get('/tutor/:id')
+    getAllCoursesForUsers(
+        @Param('id') tutorId:number){
+            return this.courseService.findAllCoursesForTutor(tutorId);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findOne(
         @Param('id')courseId:number){
@@ -33,6 +43,8 @@ export class CourseController{
             return course;
     }
 
+    @Roles('tutor')
+    @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
     @Post()
     async create(
@@ -43,24 +55,28 @@ export class CourseController{
     }
 
     //middleware(guard) for model instance access authorization
+    @Roles('tutor')
+    @UseGuards(RolesGuard)
     @UseGuards(ModelInstnaceAccessGurad)
     @UseGuards(JwtAuthGuard)
     @Put(':id')
     async update(@Param('id') id: number, @Body() course: CourseDto){
-/*         const updatedCourse = await this.courseService.updateCourse(id, course, req.user.id);
+        const updatedCourse = await this.courseService.updateCourse(id, course);
 
         if (updatedCourse[0]===0) {
             throw new NotFoundException('This course doesnt exist');
         }
 
 
-        return updatedCourse; */
+        return updatedCourse;
     }
 
+    @Roles('tutor')
+    @UseGuards(RolesGuard)
+    @UseGuards(ModelInstnaceAccessGurad)
     @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async delete(@Param('id') id: number, @Request() req) {
-        //console.log(req.user.id);
         const deleted = await this.courseService.deleteCourse(id, req.user.id);
 
         if (deleted === 0) {

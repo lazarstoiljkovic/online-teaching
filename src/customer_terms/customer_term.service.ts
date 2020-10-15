@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { CourseService } from "src/courses/course.service";
 import { TermService } from "src/terms/term.service";
 import { CustomerTerm } from "./customer_term.entity";
 
@@ -6,18 +7,29 @@ import { CustomerTerm } from "./customer_term.entity";
 export class CustomerTermService{
     constructor(
         @Inject('CUSTOMERTERMS_REPOSITORY') private readonly customerTermRepository: typeof CustomerTerm,
-        private readonly termService:TermService){
+        private readonly termService:TermService,private readonly courseService:CourseService){
 
     }
 
     async createCustomerTerm(termId:number,customerId:number):Promise<CustomerTerm>{
-        const result=await this.termService.findOne(termId);
+        console.log(123456);
+        const term=await this.termService.findOne(termId);
+        console.log(term);
+        const course=await this.courseService.findOne(term.courseId);
+        console.log(course);
 
-        if(!result){
+        if(!term){
             return null;
-        }else
+        }
+        else if(term.currentCustomersOnCourse+1<course.maxNumberOfCustomers){
+            const customerTerm=await this.customerTermRepository.create({termId,customerId});
+            term.currentCustomersOnCourse=term.currentCustomersOnCourse+1;
+            term.save();
+            return customerTerm; 
+        }
+        else 
         {
-            return await this.customerTermRepository.create({termId,customerId});
+            return null;
         }
 
     }

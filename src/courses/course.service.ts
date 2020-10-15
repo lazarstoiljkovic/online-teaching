@@ -64,10 +64,10 @@ export class CourseService{
         });
     }
 
-    async updateCourse(id:number,course:CourseDto,tutorId:number){
+    async updateCourse(id:number,course:CourseDto){
         return await this.courseRepository.update({...course},{
             where:{
-                id,tutorId
+                id
             }
         });
     }

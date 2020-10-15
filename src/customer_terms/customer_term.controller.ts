@@ -1,5 +1,7 @@
 import { Body, Controller, Param, Post, UseGuards,Request, NotFoundException } from "@nestjs/common";
+import { Roles } from "src/auth/decorators/roles.decorator";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { RolesGuard } from "src/auth/guards/roles.guard";
 import { CustomerTermService } from "./customer_term.service";
 
 @Controller('customer_terms')
@@ -8,11 +10,14 @@ export class CustomerTermController{
 
     }
 
+    @Roles('customer')
+    @UseGuards(RolesGuard)
     @UseGuards(JwtAuthGuard)
-    @Post('/customer_term/create/:termId')
+    @Post('/:termId')
     async createCustomerTerm(
         @Param('termId') termId:number,
         @Request() req){
+            console.log('klklklkl');
             const result=await this.customerTermService.createCustomerTerm(termId,req.user.id);
             if(!result){
                 throw new NotFoundException('This term doesnt exist');

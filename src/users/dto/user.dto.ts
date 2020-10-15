@@ -18,6 +18,7 @@ export class UserDto{
     @MinLength(6)
     password:string;
     role:UserRole;
+    validEmail:boolean;
     profileDetails:string;
 
 

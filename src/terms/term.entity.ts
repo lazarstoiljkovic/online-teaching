@@ -27,7 +27,8 @@ export class Term extends Model {
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue:0
     })
     currentCustomersOnCourse: number;
 
