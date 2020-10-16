@@ -1,13 +1,10 @@
 import { ModulesContainer } from '@nestjs/core';
 import {Sequelize} from 'sequelize-typescript'
-import { Course } from 'src/courses/course.entity';
-import { Customer } from 'src/customers/customer.entity';
-import { CustomerTerm } from 'src/customer_terms/customer_term.entity';
-import { Term } from 'src/terms/term.entity';
-import { Token } from 'src/tokens/token.entity';
-import { TutorDto } from 'src/tutors/dto/tutor.dto';
-import { User } from 'src/users/user.entity';
-import { Tutor } from '../tutors/tutor.entity';
+import { Course } from 'src/models/course.entity';
+import { CustomerTerm } from 'src/models/customer_term.entity';
+import { Term } from 'src/models/term.entity';
+import { User } from 'src/models/user.entity';
+
 
 export const databaseProviders=[{
     provide: 'SEQUELIZE',
