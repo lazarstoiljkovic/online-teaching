@@ -76,7 +76,7 @@ export class AuthService{
     }
 
     async sendEmailVerification(email: string): Promise<boolean> {
-        let transporter = nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({
             host: "smtp.ethereal.email",
             port: 587,
             secure: false,
@@ -86,7 +86,7 @@ export class AuthService{
             }
         });
     
-        let mailOptions = {
+        const mailOptions = {
           from: '"Company" <' + 'djlaza007@gmail.com' + '>', 
           to: email,
           subject: 'Verify Email', 
@@ -95,7 +95,7 @@ export class AuthService{
           '<a href='+ 'localhost' + ':' + '3000' +'/auth/email/verify/'+ email + '>Click here to activate your account</a>'
         };
     
-        var sent = await new Promise<boolean>(async function(resolve, reject) {
+        const sent = await new Promise<boolean>(async function(resolve, reject) {
           return await transporter.sendMail(mailOptions, async (error, info) => {
               if (error) {      
                 console.log('Message sent: %s', error);

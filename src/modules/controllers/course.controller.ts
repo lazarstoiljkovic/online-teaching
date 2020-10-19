@@ -6,18 +6,20 @@ import { ModelInstnaceAccessGurad } from "src/guards/modelInstanceAccess.guard";
 import { RolesGuard } from "src/guards/roles.guard";
 import { CourseService } from "../services/course.service";
 import { CourseDto } from '../../models/dtos/course.dto';
+import { PaginationService } from "../services/pagination.service";
+import { PaginationResponseDto } from "src/models/dtos/paginatio-response.dto";
 
 @Controller('courses')
 export class CourseController{
-    constructor(private readonly courseService:CourseService){}
+    constructor(private readonly courseService:CourseService,private readonly paginationService:PaginationService){}
 
     @UseGuards(JwtAuthGuard)
     @Get()
-    findAll(@Query() paginationDto: PaginationDto){
+    async findAll(@Query() paginationDto: PaginationDto):Promise<PaginationResponseDto>{
         paginationDto.page = Number(paginationDto.page);
         paginationDto.limit = Number(paginationDto.limit);
 
-        return this.courseService.findAllCourses(paginationDto);
+        return this.paginationService.getAllCoursesByPage(paginationDto);
     }
 
     @UseGuards(JwtAuthGuard)

@@ -10,6 +10,7 @@ export class RolesGuard implements CanActivate{
     }
 
     canActivate(context:ExecutionContext):boolean|Promise<boolean>|Observable<boolean>{
+        console.log('roles')
         const roles=this.reflector.get<string[]>('roles',context.getHandler());
 
         if(!roles){
@@ -17,19 +18,14 @@ export class RolesGuard implements CanActivate{
         }
 
         const request:any=context.switchToHttp().getRequest<Request>();
-        const user=request.user;
+        const { user } = request;
 
-        const {role}=user;
         console.log(user.role);
 
         if(!user){
             return false;
         }
 
-        if(user.role===roles[0]){
-            return true;
-        }
-
-        return false;
+        return user.role===roles[0];
     }
 }

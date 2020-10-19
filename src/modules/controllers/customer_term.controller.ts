@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, UseGuards,Request, NotFoundException } from "@nestjs/common";
+import { Controller, Param, Post, UseGuards,Request, NotFoundException } from "@nestjs/common";
 import { Roles } from "src/guards/decorators/roles.decorator";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { RolesGuard } from "src/guards/roles.guard";

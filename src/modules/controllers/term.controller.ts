@@ -1,10 +1,9 @@
-import { Body, Controller, Param, Post, UseGuards,Request, NotFoundException, Put, Get, Delete } from "@nestjs/common";
+import { Body, Controller, Param, Post, UseGuards,Request, Put, Get, Delete } from "@nestjs/common";
 import { Roles } from "src/guards/decorators/roles.decorator";
 import { JwtAuthGuard } from "src/guards/jwt-auth.guard";
 import { ModelInstnaceAccessGurad } from "src/guards/modelInstanceAccess.guard";
 import { RolesGuard } from "src/guards/roles.guard";
 import { TermDto } from "../../models/dtos/term.dto";
-import { termProvider } from "../providers/term.provider";
 import { TermService } from "../services/term.service";
 
 @Controller('terms')
@@ -14,9 +13,7 @@ export class TermController{
     }
 
     @Roles('tutor')
-    @UseGuards(RolesGuard)
-    @UseGuards(ModelInstnaceAccessGurad)
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard,ModelInstnaceAccessGurad,RolesGuard)
     @Post(':id')
     async createTerm(
         @Param('id') courseId:number,
@@ -37,7 +34,7 @@ export class TermController{
     @UseGuards(ModelInstnaceAccessGurad)
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async updateTerm(@Param('id')termId:number,@Body()termDto:TermDto) {
+    async updateTerm(@Param('id')termId:number,@Body() termDto:TermDto) {
         return this.termService.updateTerm(termId,termDto);
     }
 

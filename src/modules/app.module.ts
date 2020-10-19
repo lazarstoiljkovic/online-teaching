@@ -8,6 +8,7 @@ import { CustomerTermModule } from './customer_term.module';
 import { UserModule } from './user.module';
 import { VerifyEmailMiddleware } from '../middlewares/verifyEmail.middleware';
 import { AuthController } from '../modules/controllers/auth.controller';
+import { AppGateway } from 'src/websockets/app.gateway';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AuthController } from '../modules/controllers/auth.controller';
     UserModule
   ],
   controllers: [],
-  providers: [],
+  providers: [AppGateway],
 })
 export class AppModule implements NestModule{
   configure(consumer:MiddlewareConsumer){

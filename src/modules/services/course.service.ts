@@ -32,7 +32,6 @@ export class CourseService{
     async findAllCourses(paginationDto:PaginationDto):Promise<Course[]>{
 
         const skippedItems=(paginationDto.page-1)*paginationDto.limit;
-
         return this.courseRepository.findAll({
             limit:paginationDto.limit,
             offset:skippedItems,

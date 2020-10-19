@@ -26,14 +26,18 @@
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/platform-socket.io": "^7.4.4",
     "@nestjs/sequelize": "^0.1.1",
+    "@nestjs/websockets": "^7.4.4",
     "@types/bcrypt": "^3.0.0",
     "@types/nodemailer": "^6.4.0",
     "@types/nodemailer-direct-transport": "^1.0.31",
     "@types/nodemailer-smtp-transport": "^2.7.4",
+    "@types/socket.io": "^2.1.11",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
+    "dayjs": "^1.9.3",
     "dotenv": "^8.2.0",
     "nestjs-pagination-module": "^1.1.5",
     "nodemailer": "^6.4.13",
@@ -46,7 +50,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "sequelize": "^5.22.3",
-    "sequelize-typescript": "^1.1.0"
+    "sequelize-typescript": "^1.1.0",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",

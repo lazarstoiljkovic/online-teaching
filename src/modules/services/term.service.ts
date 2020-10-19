@@ -1,26 +1,24 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { createWriteStream } from "fs";
 import { Course } from "src/models/course.entity";
 import { CourseService } from "../services/course.service";
-import { User } from "src/models/user.entity";
 import { TermDto } from "../../models/dtos/term.dto";
 import { Term } from "../../models/term.entity";
+import * as dayjs from 'dayjs'
+import { Op } from "sequelize";
 
 @Injectable()
 export class TermService{
     constructor(
         @Inject('TERMS_REPOSITORY') private readonly termRepository : typeof Term,
-        private readonly courseService:CourseService
     ){
 
     }
 
     async createTerm(term:TermDto,courseId:number,tutorId:number):Promise<Term>{
-
         const pom=await this.checkIfFreeTerm(tutorId,term);
         //console.log('sdsdfdsf');
         //console.log(pom);
-        if(pom===false){
+        if(!pom){
             return null;
         }
 
@@ -29,55 +27,48 @@ export class TermService{
     }
 
     private async checkIfFreeTerm(tutorId:number,termDto:TermDto):Promise<boolean>{
-        let newStartTime=new Date(termDto.startTime);
-        let newEndTime=new Date(termDto.endTime);
+        const newStartTime=new Date(termDto.startTime);
+        const newEndTime=new Date(termDto.endTime);
         console.log(newStartTime);
         console.log(newEndTime);
 
-        const terms=await this.termRepository.findAll({
-            where:{tutorId:tutorId}
+        const term=await this.termRepository.findOne({
+            where:{
+                tutorId,
+                [Op.or]:[
+                    {
+                        startTime: {
+                            [Op.lt]:newStartTime
+                        },
+                        endTime:{
+                            [Op.gt]:newStartTime
+                        }
+                    },
+                    {
+                        startTime:{
+                            [Op.gt]:newStartTime,
+                            [Op.lt]:newEndTime 
+                        }
+                        
+                    }
+                ]
+                
+            }
         });
 
-        let pom:boolean=true;
+        console.log(term);
 
-        pom=terms.every((term)=>{
-            let startTime=new Date(term.startTime);
-            let endTime=new Date(term.endTime);
+        if(term===null){
+            return true;
+        }
 
-            if(this.compareDate(newStartTime,startTime)===0)
-            {
-                console.log('bla');
-
-                return false;
-            }
-            else if(this.compareDate(newStartTime,startTime)===1 && this.compareDate(newStartTime,endTime)===-1){
-                console.log('blabla');
-
-                return false;
-            }
-            else if(this.compareDate(newStartTime,startTime)===-1 && this.compareDate(newEndTime,startTime)===1){
-                console.log('blablabla');
-
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-
-
-        });
-
-        console.log(pom);
-
-        return pom;
-
+        return false;
     }
 
     private compareDate(date1:Date,date2:Date):number{
-        let d1 = new Date(date1); let d2 = new Date(date2);
+        const d1 = new Date(date1); const d2 = new Date(date2);
 
-        let same = d1.getTime() === d2.getTime();
+        const same = d1.getTime() === d2.getTime();
         if (same) return 0;
       
         if (d1 > d2) return 1;

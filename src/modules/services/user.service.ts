@@ -68,8 +68,8 @@ export class UserService{
     }
 
     async getTutorsCoursesInPeriod(tutorId:number,periodDto:PeriodDto){
-        let startDate=new Date(periodDto.startDate);
-        let endDate=new Date(periodDto.endDate);
+        const startDate=new Date(periodDto.startDate);
+        const endDate=new Date(periodDto.endDate);
 
         return this.termsRepository.findAll({
             where:{

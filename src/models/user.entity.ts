@@ -60,7 +60,7 @@ export class User extends Model {
 
     @Column({
         type:DataType.STRING(1024),
-        defaultValue:'undefined'
+        defaultValue:'undefined',
     })
     profileDetails:string;
 
