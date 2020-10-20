@@ -25,9 +25,9 @@ export class PaginationService{
                 }
             }]
         });
-        //console.log(result);
-        //console.log(result.rows);
-        //console.log(result.count);
+        console.log(result);
+        console.log(result.rows);
+        console.log(result.count);
         const totalPages=parseInt((result.count/paginationDto.limit).toString())+1;
         console.log(totalPages);
         const paginationResponse:PaginationResponseDto={
