@@ -1,9 +1,8 @@
-import { ModulesContainer } from '@nestjs/core';
 import {Sequelize} from 'sequelize-typescript'
-import { Course } from 'src/models/course.entity';
-import { CustomerTerm } from 'src/models/customer_term.entity';
-import { Term } from 'src/models/term.entity';
-import { User } from 'src/models/user.entity';
+import { Course } from 'src/persistence/course/course.entity';
+import { CustomerTerm } from 'src/persistence/customer_term/customer_term.entity';
+import { Term } from 'src/persistence/term/term.entity';
+import { User } from 'src/persistence/user/user.entity';
 
 
 export const databaseProviders=[{
