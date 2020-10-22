@@ -31,7 +31,6 @@ export class TermController{
 
     @Roles('tutor')
     @UseGuards(RolesGuard)
-    @UseGuards(ModelInstnaceAccessGurad)
     @UseGuards(JwtAuthGuard)
     @Put(':id')
     async updateTerm(@Param('id')termId:number,@Body() termDto:TermDto) {
@@ -40,7 +39,6 @@ export class TermController{
 
     @Roles('tutor')
     @UseGuards(RolesGuard)
-    @UseGuards(ModelInstnaceAccessGurad)
     @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async deleteTerm(@Param('id')termId:number) {

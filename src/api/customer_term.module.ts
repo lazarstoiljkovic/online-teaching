@@ -1,12 +1,11 @@
 import { Module } from "@nestjs/common";
 import { DatabaseModule } from "src/database/database.module";
-import { TermModule } from "src/api/term.module";
 import { CustomerTermController } from "./customer_term/controllers/customer_term.controller";
 import { customerTermsProvider } from "../persistence/customer_term/customer_term.provider";
 import { CustomerTermService } from "./customer_term/services/customer_term.service";
 
 @Module({
-    imports:[DatabaseModule,TermModule],
+    imports:[DatabaseModule],
     controllers:[CustomerTermController],
     providers:[CustomerTermService,...customerTermsProvider],
     exports:[CustomerTermService]

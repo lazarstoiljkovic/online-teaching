@@ -76,7 +76,7 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
         const query={};
         this.filterQuery(query,filterOptions);
         console.log(query);
-        return this.model.findOne(query);
+        return this.model.findOne(query)
     }
 
     //post method
@@ -84,6 +84,20 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
         console.log('to je tooo');
         //mogu se proslediti i dodati nove opcije
         return this.model.create(model);
+    }
+
+    //put method
+    public async update(model,filterOptions){
+        const query:any={};
+        this.filterQuery(query,filterOptions);
+        this.model.update(model,query);
+    }
+
+    //delete method
+    public async delete(filterOptions){
+        const query={};
+        this.filterQuery(query,filterOptions);
+        this.model.destroy(query);
     }
 
     paginateQuery(query,paginationDto){
@@ -103,7 +117,7 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
 
 /*     relationsQuery(query,relationOptions){
         const {relationPaths=[]} =relationOptions
-        const modelIncludes=this.model.INCLUDES;
+        const modelIncludes=this.model.
         const relations=[];
         relationPaths.forEach(modelName=>{
             const relationModel=modelIncludes[modelName]

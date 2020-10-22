@@ -4,6 +4,10 @@ import { User } from '../user/user.entity';
 @Table
 export class Course extends Model {
 
+    static INCLUDES={
+        tutor:User
+    }
+
     @Column({
         type: DataType.STRING,
         allowNull: false,

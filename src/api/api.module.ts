@@ -9,14 +9,16 @@ import { termProvider } from "src/persistence/term/term.provider";
 import { userProvider } from "src/persistence/user/user.provider";
 import { CourseController } from "./course/controllers/course.controller";
 import { CourseService } from "./course/services/course.service";
+import { TermController } from "./term/controllers/term.controller";
+import { TermService } from "./term/services/term.service";
 import { AuthController } from "./user/controllers/auth.controller";
 import { UserController } from "./user/controllers/user.controller";
 import { AuthService } from "./user/services/auth.service";
 import { UserService } from "./user/services/user.service";
 
 @Module({
-    controllers:[UserController,AuthController,CourseController],
-    providers:[UserService,AuthService,CourseService,LocalStrategy,JwtStrategy,...userProvider,...termProvider,...courseProvider],
+    controllers:[UserController,AuthController,CourseController,TermController],
+    providers:[UserService,AuthService,CourseService,TermService,LocalStrategy,JwtStrategy,...userProvider,...termProvider,...courseProvider],
     imports:[
         DomainModule,
         PassportModule,

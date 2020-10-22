@@ -11,77 +11,7 @@ export enum UserRole{
     CUSTOMER='customer'
 }
 
-class FindOption implements FindOptions{
-    limit:number;
-    skip:number;
-    
-    paginate(paginationData:PaginationDto){
-        const skippedItems=(paginationData.page-1)*paginationData.limit;
-        this.limit=paginationData.limit;
-        this.skip=skippedItems;
-        return this; 
-    }
 
-    filter(filterData){
-        return this;
-    }
-
-    sort(sortData){
-        return this;
-    }
-}
-
-class ModelRepository<T extends typeof BuffedModel & { new (): void}> {
-    model:T;
-    constructor(model:T){
-        this.model=model;
-    }
-
-    get(paginateOptions,filterOptions,sortOptions,relationOptions){
-        const query=new FindOption();
-        this.paginateQuery(query,paginateOptions);
-        this.filterQuery(query,filterOptions)
-        this.sortQuery(query,sortOptions)
-        this.relationsQuery(query,relationOptions)
-        return this.model.findAndCountAll(query)
-    }
-
-    paginateQuery(query,paginationDto){
-        const skippedItems=(paginationDto.page-1)*paginationDto.limit;
-        query.limit=paginationDto.limit;
-        query.skip=skippedItems;
-    }
-
-    filterQuery(query,filterOptions){
-        query.where=filterOptions;
-        return;
-    }
-
-    sortQuery(query,sortOptions){
-        return;
-    }
-
-    relationsQuery(query,relationOptions){
-        const {relationPaths=[]} =relationOptions
-        const modelIncludes=this.model.INCLUDES;
-        const relations=[];
-        relationPaths.forEach(modelName=>{
-            const relationModel=modelIncludes[modelName]
-            if(relationModel){
-                relations.push({
-                    model:relationModel,
-                    attributes:relationModel.getAttributes()
-                })
-            }
-        })
-        query.includes=relations;
-    }
-}
-
-
-type UserType= { 
-    name?: string;
-}
 
 
 
@@ -105,14 +35,13 @@ class BuffedModel extends Model{
 }
 
 @Table
-export class User extends Model {
+export class User extends BuffedModel {
     static INCLUDES={
         customerTerms:Term,
         courses:Course
     }
-    static DEFAULT_EXCLUDES=['password']
-    static FILLABLE=['firstName','lastName','username']
 
+    static DEFAULT_EXCLUDES=['password']
     
     @Column({
         type: DataType.STRING,
