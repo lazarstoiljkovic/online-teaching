@@ -3,6 +3,7 @@ import { CourseDto } from "src/domain/course/course.dto";
 import { ICourseRepository } from "src/domain/course/ICourseRepository";
 import { PaginationDto } from "src/domain/user/pagination.dto";
 import { ModelRepository } from "../model/model.repository";
+import { User } from "../user/user.entity";
 import { Course } from "./course.entity";
 
 @Injectable()
@@ -14,7 +15,8 @@ export class CourseRepository implements ICourseRepository{
     }
 
     getCoursesPaginated(paginationDto: PaginationDto) {
-        return this.courseRepo.get(paginationDto);
+        const relationOptions=[User];
+        return this.courseRepo.get(paginationDto,undefined,undefined,relationOptions);
     }
     getCoursesForUsersPaginated(tutorId: number, paginationDto: PaginationDto) {
         const filterOptions={tutorId:tutorId};
@@ -22,16 +24,20 @@ export class CourseRepository implements ICourseRepository{
     }
     getOneCourse(id: number) {
         const filterOptions={id:id};
-        return this.courseRepo.get(filterOptions);
+        return this.courseRepo.get(undefined,filterOptions,undefined,undefined);
     }
     createCourse(courseDto: CourseDto) {
         return this.courseRepo.create(courseDto);
     }
     updateCourse(id: number, courseDto: CourseDto) {
-        throw new Error("Method not implemented.");
+        const model={...courseDto};
+        const filterOptions={id:id};
+        return this.courseRepo.update(model,filterOptions);
     }
-    deleteCourse(id: number) {
-        throw new Error("Method not implemented.");
+
+    deleteCourse(id: number,tutorId:number) {
+        const filterOptions={id:id,tutprId:tutorId};
+        return this.courseRepo.delete(filterOptions);
     }
     
 }

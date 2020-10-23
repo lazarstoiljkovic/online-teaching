@@ -36,12 +36,16 @@ class BuffedModel extends Model{
 
 @Table
 export class User extends BuffedModel {
-    static INCLUDES={
+    public static INCLUDES={
         customerTerms:Term,
         courses:Course
     }
 
-    static DEFAULT_EXCLUDES=['password']
+    static DEFAULT_EXCLUDES=['password','firstName','lastName','username']
+
+    static getHello(){
+        console.log('Hello world');
+    }
     
     @Column({
         type: DataType.STRING,

@@ -8,6 +8,8 @@ export class Course extends Model {
         tutor:User
     }
 
+    
+
     @Column({
         type: DataType.STRING,
         allowNull: false,

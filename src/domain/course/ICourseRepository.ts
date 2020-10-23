@@ -7,5 +7,5 @@ export interface ICourseRepository{
     getOneCourse(id:number);
     createCourse(courseDto:CourseDto);
     updateCourse(id:number,courseDto:CourseDto);
-    deleteCourse(id:number);
+    deleteCourse(id:number,tutorId:number);
 }

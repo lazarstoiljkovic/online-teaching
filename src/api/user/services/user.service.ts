@@ -9,12 +9,14 @@ import { Op } from "sequelize";
 import sequelize from "sequelize";
 import { GetUserPaginated } from "src/domain/user/GetUsersPaginated";
 import { GetUserById } from "src/domain/user/GetUserById";
+import { UserCRUD } from "src/domain/user/UserCRUD";
 
 
 export class UserService{
     constructor(
         @Inject('USERS_REPOSITORY') private readonly usersRepository:typeof User,
         @Inject('TERMS_REPOSITORY') private readonly termsRepository:typeof Term,
+        private readonly userCRUD: UserCRUD,
         private readonly getUserPaginated: GetUserPaginated,
         private readonly getUserById:GetUserById
     ){
@@ -26,67 +28,36 @@ export class UserService{
     }
 
     async getAllTutors(paginationDto:PaginationDto):Promise<User[]>{
-/*         const skippedItems=(paginationDto.page-1)*paginationDto.limit;
-        const query:any={};
-        query.limit=paginationDto.limit;
-        query.offset=skippedItems;
-        query.where={role:'tutor'};
-        console.log(query); */
-
-        return this.getUserPaginated.getUserPaginated(paginationDto);
-        //return this.usersRepository.findAll(query);
+        return this.userCRUD.getUserPaginated(paginationDto);
+        
     }
 
     async createUser(userDto:UserDto):Promise<User>{
-        return this.usersRepository.create(userDto);
+        return this.userCRUD.createUser(userDto);
     }
 
     async updateUser(id:number,userDto:UserDto){
-        return this.usersRepository.update({...userDto},{
-            where:{id}
-        });
+        return this.userCRUD.updateUser(id,userDto);
     }
 
     async deleteUser(id:number){
-        return this.usersRepository.destroy({
-            where:{id}
-        });
+        return this.userCRUD.deleteUser(id);
     }
 
     async getUserByEmail(email:string):Promise<User>{
-        return this.usersRepository.findOne({
-            where:{email:email}
-        });
+        return this.userCRUD.getUserByEmail(email);
     }
 
     async getUserByUsername(username:string):Promise<User>{
-        return this.usersRepository.findOne({
-            where:{username:username}
-        });
+        return this.userCRUD.getUserByUsername(username);
     }
 
     async findOneById(id:number):Promise<User>{
-        const user=await this.getUserById.getUserById(id);
-        console.log(user);
-        console.log('asdasdasdasd');
-        return user;
+        return this.userCRUD.getUserById(id);
     }
 
     async getTutorsCoursesInPeriod(tutorId:number,periodDto:PeriodDto){
-        const startDate=new Date(periodDto.startDate);
-        const endDate=new Date(periodDto.endDate);
-
-        return this.termsRepository.findAll({
-            where:{
-                tutorId:tutorId,
-                date:{
-                    [Op.gt]:startDate,
-                    [Op.lt]:endDate
-                }
-            }
-        });
-
-
+        return this.userCRUD.getTutorsCoursesForPeriod(tutorId,periodDto);
     }
 
 

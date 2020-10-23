@@ -7,15 +7,16 @@ import { CustomerTerm } from "../../../persistence/customer_term/customer_term.e
 export class CustomerTermService{
     constructor(
         @Inject('CUSTOMERTERMS_REPOSITORY') private readonly customerTermRepository: typeof CustomerTerm,
-        private readonly termService:TermService){
+        private readonly termService:TermService,
+        private readonly courseService:CourseService){
 
     }
-/* 
+
     async createCustomerTerm(termId:number,customerId:number):Promise<CustomerTerm>{
         console.log(123456);
         const term=await this.termService.findOne(termId);
         console.log(term);
-        //const course=await this.courseService.findOne(term.courseId);
+        const course=await this.courseService.findOne(term.courseId);
         console.log(course);
 
         if(!term){
@@ -32,6 +33,6 @@ export class CustomerTermService{
             return null;
         }
 
-    } */
+    }
     
 }

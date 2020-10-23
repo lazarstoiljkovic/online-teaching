@@ -17,14 +17,13 @@ export class CustomerTermController{
     async createCustomerTerm(
         @Param('termId') termId:number,
         @Request() req){
-            console.log('klklklkl');
-            //const result=await this.customerTermService.createCustomerTerm(termId,req.user.id);
-/*             if(!result){
+            const result=await this.customerTermService.createCustomerTerm(termId,req.user.id);
+            if(!result){
                 throw new NotFoundException('This term doesnt exist');
             }
             else
             {
                 return result;
-            } */
+            }
     }
 }

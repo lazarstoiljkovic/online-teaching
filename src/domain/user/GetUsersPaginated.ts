@@ -9,7 +9,6 @@ export class GetUserPaginated{
     }
 
     public async getUserPaginated(paginationDto:PaginationDto){
-        console.log(12);
         return this.userRepository.findAllPaginated(paginationDto);
     }
 

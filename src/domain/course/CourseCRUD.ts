@@ -24,4 +24,12 @@ export class CourseCRUD{
     public async createCourse(courseDto:CourseDto){
         return this.courseRepository.createCourse(courseDto);
     }
+
+    public async updateCourse(id:number,courseDto:CourseDto){
+        return this.courseRepository.updateCourse(id,courseDto);
+    }
+
+    public async deleteCourse(id:number,tutorId:number){
+        return this.courseRepository.deleteCourse(id,tutorId);
+    }
 }

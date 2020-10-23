@@ -25,10 +25,7 @@ class FindOption implements FindOptions{
 }
 
 class BuffedModel extends Model{
-    static INCLUDES={
-        customerTerms:Term,
-        courses:Course
-    }
+    static INCLUDES={}
     static DEFAULT_EXCLUDES = [];
     static DEFAULT_INCLUDES = null;
     static getAttributes():FindAttributeOptions{
@@ -53,7 +50,7 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
     //get method
     public async get(paginateOptions?,filterOptions?,sortOptions?,relationOptions?){
         console.log(123456);
-        console.log(paginateOptions,sortOptions,filterOptions);
+        console.log(paginateOptions,sortOptions,filterOptions,relationOptions);
         //const query=new FindOption();
         const query={};
         if(paginateOptions!==undefined){
@@ -67,7 +64,12 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
         if(sortOptions!==undefined){
             this.sortQuery(query,sortOptions);
         }
-        //this.relationsQuery(query,relationOptions)
+
+        if(relationOptions!==undefined){
+            this.relationsQuery(query,relationOptions);
+        }
+
+
         return this.model.findAndCountAll(query);
     }
 
@@ -103,7 +105,7 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
     paginateQuery(query,paginationDto){
         const skippedItems=(paginationDto.page-1)*paginationDto.limit;
         query.limit=paginationDto.limit;
-        query.skip=skippedItems;
+        query.offset=skippedItems;
     }
 
     filterQuery(query,filterOptions){
@@ -115,20 +117,20 @@ export class ModelRepository<T extends typeof Model & { new (): void}>{
         return;
     }
 
-/*     relationsQuery(query,relationOptions){
+    relationsQuery(query,relationOptions){
         const {relationPaths=[]} =relationOptions
-        const modelIncludes=this.model.
+        console.log(relationOptions);
+        console.log(relationPaths);
         const relations=[];
-        relationPaths.forEach(modelName=>{
-            const relationModel=modelIncludes[modelName]
-            if(relationModel){
-                relations.push({
-                    model:relationModel,
-                    attributes:relationModel.getAttributes()
-                })
-            }
-        })
-        query.includes=relations;
-    } */
+        relationOptions.forEach(modelName=>{
+            relations.push({
+                model:modelName,
+                attributes:modelName.getAttributes()
+            })
+        });
+        console.log(relations);
+        query.include=relations;
+        console.log(query);
+    }
 
 }
