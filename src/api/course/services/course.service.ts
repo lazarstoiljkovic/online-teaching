@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { HttpService, Inject, Injectable } from "@nestjs/common";
 import { PaginationDto } from "src/domain/user/pagination.dto";
 import { Course } from "../../../persistence/course/course.entity";
 import { CourseDto } from "../../../domain/course/course.dto";
@@ -9,12 +9,14 @@ import { CourseCRUD } from "src/domain/course/CourseCRUD";
 export class CourseService{
     constructor(
         @Inject('COURSES_REPOSITORY') private readonly courseRepository: typeof Course,
+        private readonly httpService:HttpService,
         private readonly courseCRUD:CourseCRUD){
 
     }
 
     async createCourse(courseDto:CourseDto, tutorId:number): Promise<Course>{
         console.log(tutorId);
+        this.httpService.post('',{});
         return this.courseCRUD.createCourse(courseDto);
     }
 
