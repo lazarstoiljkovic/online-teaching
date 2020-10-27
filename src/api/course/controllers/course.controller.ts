@@ -7,10 +7,18 @@ import { RolesGuard } from "src/auth/guards/roles.guard";
 import { CourseService } from "../services/course.service";
 import { CourseDto } from '../../../domain/course/course.dto';
 import { PaginationResponseDto } from "src/domain/user/paginatio-response.dto";
+import { MathService } from "src/domain/services/math.service";
 
 @Controller('courses')
 export class CourseController{
-    constructor(private readonly courseService:CourseService){}
+    constructor(private readonly courseService:CourseService,private readonly mathService:MathService){}
+
+    @Post('/accumulate')
+    async accumulate(@Body()data:any
+    ){
+        console.log(data.data);
+        return this.mathService.accumulate(data.data);
+    }
 
     @UseGuards(JwtAuthGuard)
     @Get()

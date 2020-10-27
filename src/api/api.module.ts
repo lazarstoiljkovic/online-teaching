@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { HttpModule, Module } from "@nestjs/common";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "src/auth/guards/strategies/jwt.strategy";
@@ -18,11 +18,14 @@ import { AuthController } from "./user/controllers/auth.controller";
 import { UserController } from "./user/controllers/user.controller";
 import { AuthService } from "./user/services/auth.service";
 import { UserService } from "./user/services/user.service";
+import { WebhookController } from "./webhooks/controllers/webhook.controller";
+import { WebhookService } from "./webhooks/services/webhook.service";
 
 @Module({
-    controllers:[UserController,AuthController,CourseController,TermController,CustomerTermController],
-    providers:[UserService,AuthService,CourseService,TermService,CustomerTermService,LocalStrategy,JwtStrategy,...userProvider,...termProvider,...courseProvider,...customerTermsProvider],
+    controllers:[UserController,AuthController,CourseController,TermController,CustomerTermController,WebhookController],
+    providers:[UserService,AuthService,CourseService,TermService,CustomerTermService,WebhookService,LocalStrategy,JwtStrategy,...userProvider,...termProvider,...courseProvider,...customerTermsProvider],
     imports:[
+        HttpModule,
         DomainModule,
         PassportModule,
         JwtModule.register({
