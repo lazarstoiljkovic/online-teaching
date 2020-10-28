@@ -5,7 +5,7 @@ import { WebhookCRUD } from "src/domain/webhook/WebhookCRUD";
 import { WebhookLogDto } from "src/domain/webhook_log/webhook_log.dto";
 
 @Injectable()
-export class WebhookService{
+export class WebhookApiService{
     constructor(private readonly webhookCRUD:WebhookCRUD){
 
     }

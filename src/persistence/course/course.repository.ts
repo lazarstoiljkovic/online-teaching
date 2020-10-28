@@ -26,8 +26,9 @@ export class CourseRepository implements ICourseRepository{
         const filterOptions={id:id};
         return this.courseRepo.get(undefined,filterOptions,undefined,undefined);
     }
-    createCourse(courseDto: CourseDto) {
-        return this.courseRepo.create(courseDto);
+    
+    createCourse(courseDto: CourseDto,tutorId:number) {
+        return this.courseRepo.create({...courseDto,tutorId});
     }
     updateCourse(id: number, courseDto: CourseDto) {
         const model={...courseDto};

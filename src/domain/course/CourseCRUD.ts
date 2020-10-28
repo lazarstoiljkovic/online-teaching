@@ -21,8 +21,8 @@ export class CourseCRUD{
         return this.courseRepository.getOneCourse(id);
     }
 
-    public async createCourse(courseDto:CourseDto){
-        return this.courseRepository.createCourse(courseDto);
+    public async createCourse(courseDto:CourseDto, tutorId:number){
+        return this.courseRepository.createCourse(courseDto,tutorId);
     }
 
     public async updateCourse(id:number,courseDto:CourseDto){

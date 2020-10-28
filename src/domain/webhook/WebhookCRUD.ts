@@ -19,4 +19,8 @@ export class WebhookCRUD{
     public async deleteWebhook(id:number){
         return this.webhookRepository.deleteWebhook(id);
     }
+
+    public async findWebhooksForEvent(name:string,event:string){
+        return this.webhookRepository.findWebhooksForEvent(name,event);
+    }
 }

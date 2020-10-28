@@ -1,18 +1,18 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 import { PaginationDto } from "src/domain/user/pagination.dto";
 import { WebhookDto } from "src/domain/webhook/webhook.dto";
-import { WebhookService } from "../services/webhook.service";
+import { WebhookApiService } from "../services/webhook.service";
 
 @Controller('webhooks')
 export class WebhookController{
-    constructor(private readonly webhookService:WebhookService){
+    constructor(private readonly webhookApiService:WebhookApiService){
 
     }
 
     @Post()
     createWebhook(@Body() webhookDto:WebhookDto){
 
-        return this.webhookService.createWebhook(webhookDto);
+        return this.webhookApiService.createWebhook(webhookDto);
     }
 
     @Get()
@@ -20,12 +20,12 @@ export class WebhookController{
         paginationDto.page = Number(paginationDto.page);
         paginationDto.limit = Number(paginationDto.limit);
 
-        return this.webhookService.getWebhooks(paginationDto);
+        return this.webhookApiService.getWebhooks(paginationDto);
     }
 
     @Delete(':id')
     deleteWebhook(@Param('id') id:number){
-        return this.webhookService.deleteWebhook(id);
+        return this.webhookApiService.deleteWebhook(id);
     }
 
 }

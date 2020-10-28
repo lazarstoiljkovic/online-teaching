@@ -5,4 +5,5 @@ export interface IWebhookRepository{
     createWebhook(webhookDto:WebhookDto);
     getWebhooks(paginationDto:PaginationDto);
     deleteWebhook(id:number);
+    findWebhooksForEvent(name:string,event:string);
 }

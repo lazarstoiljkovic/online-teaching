@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { IWebhookRepository } from "src/domain/webhook/IWebhookRepository";
 import { WebhookDto } from "src/domain/webhook/webhook.dto";
 import { ModelRepository } from "../model/model.repository";
@@ -16,6 +17,17 @@ export class WebhookRepository implements IWebhookRepository{
     deleteWebhook(id: number) {
         const filterOptions={id:id};
         return this.webHookRepo.delete(filterOptions);
+    }
+
+    findWebhooksForEvent(name:string,event:string){
+        const filterOptions={
+            webhookName:name,
+            events:{
+                [Op.contains]:[event]
+            }
+        };
+
+        return this.webHookRepo.get(undefined,filterOptions);
     }
     
 }

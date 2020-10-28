@@ -19,11 +19,11 @@ import { UserController } from "./user/controllers/user.controller";
 import { AuthService } from "./user/services/auth.service";
 import { UserService } from "./user/services/user.service";
 import { WebhookController } from "./webhooks/controllers/webhook.controller";
-import { WebhookService } from "./webhooks/services/webhook.service";
+import { WebhookApiService } from "./webhooks/services/webhook.service";
 
 @Module({
     controllers:[UserController,AuthController,CourseController,TermController,CustomerTermController,WebhookController],
-    providers:[UserService,AuthService,CourseService,TermService,CustomerTermService,WebhookService,LocalStrategy,JwtStrategy,...userProvider,...termProvider,...courseProvider,...customerTermsProvider],
+    providers:[UserService,AuthService,CourseService,TermService,CustomerTermService,WebhookApiService,LocalStrategy,JwtStrategy,...userProvider,...termProvider,...courseProvider,...customerTermsProvider],
     imports:[
         HttpModule,
         DomainModule,
