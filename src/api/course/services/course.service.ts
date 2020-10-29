@@ -25,32 +25,15 @@ export class CourseService{
         console.log(tutorId);
         //this.httpService.post('',{});
         const webhooks=await this.webhookCRUD.findWebhooksForEvent('course','create');
-        console.log(webhooks);
+        //console.log(webhooks);
 
         const array:any[]=webhooks.rows;
 
-        array.forEach((row)=>{
+        array.forEach(async (row)=>{
             const webhookDto:WebhookDto=row;
-            console.log(webhookDto);
-            console.log(row.webhookName);
-            this.webhookService.sendCourseEventToClient(webhookDto);
-        })
-
-/*         webhooks.rows.array.forEach((row) => {
-            const webhookDto:WebhookDto=row;
-            console.log(webhookDto);
-            console.log(row.webhookName);
-            this.webhookService.sendCourseEventToClient(webhookDto);
+            const result=await this.webhookService.sendCourseEventToClient(webhookDto,'create-course');
+            console.log(result);
         });
- */
-/*         webhooks.rows.foreach((row)=>{
-            const webhookDto:WebhookDto=row;
-            console.log(webhookDto);
-            console.log(row.webhookName);
-            this.webhookService.sendCourseEventToClient(webhookDto);
-            
-            
-        }); */
 
         return this.courseCRUD.createCourse(courseDto,tutorId);
     }
