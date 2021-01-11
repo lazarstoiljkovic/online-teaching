@@ -20,13 +20,13 @@ export class WebhookService{
             transport:Transport.REDIS,
             options:{
                 url:'redis://localhost:6379',
-                auth_pass:'K/5j67m6cNx7X1+UUAV92bxxQNP+KTWMKr48FIc7R1fv6vEz2/dDqJlbVtUNkLwOgQ6fyruRanSmAdqA'
+                auth_pass:'ncoded1'
             }
         });
     }
 
     private async createWebhookLog(webhookDto,calledMethod){
-        const timestamp:Date=new Date(Date.now());
+        const timestamp:Date=new Date();
         const webhookLogDto:WebhookLogDto={
             webhookId:webhookDto.id,
             timestamp:timestamp,
@@ -37,12 +37,27 @@ export class WebhookService{
         this.webhookLogRepository.createWebhookLog(webhookLogDto);
     }
 
-    public async sendCourseEventToClient(webhookDto:any,calledMethod:string){
-        console.log(webhookDto.id);
-        console.log(webhookDto.url);
+    public async sendToAllRegisteredClient(webhooks:any[],course){
+        webhooks.forEach(async (row)=>{
+            const webhookDto:WebhookDto=row;
+            const result=await this.sendCourseEventToClient(webhookDto,'create-course',course);
+        });
+    }
+
+    public async sendCourseEventToClient(webhookDto:any,calledMethod:string,payload:any){
+        //console.log(webhookDto.id);
+        //console.log(webhookDto.url);
+        console.log('Payload');
+        console.log(payload);
         this.createWebhookLog(webhookDto,calledMethod);
-        this.httpService.post(webhookDto.url,webhookDto);
-/*         const pattern={cmd:'courseEvent'};
-        return this.clientProxy.send(pattern,webhookDto); */
+/*         try{
+        await this.httpService.post(webhookDto.url,{payload}).toPromise();
+        }catch(err){
+
+        } */
+        const pattern={cmd:'courseEvent'};
+        console.log(pattern);
+
+        return this.clientProxy.send(pattern,payload).toPromise();
     }
 }

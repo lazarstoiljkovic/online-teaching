@@ -9,7 +9,7 @@ const microserviceOptions={
   transport:Transport.REDIS,
   options:{
     url:'redis://localhost:6379',
-    auth_pass:'K/5j67m6cNx7X1+UUAV92bxxQNP+KTWMKr48FIc7R1fv6vEz2/dDqJlbVtUNkLwOgQ6fyruRanSmAdqA'
+    auth_pass:'ncoded1'
   }
 
 }

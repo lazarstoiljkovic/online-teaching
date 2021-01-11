@@ -17,10 +17,8 @@ export class CourseController{
     @Post('/accumulate')
     async accumulate(@Body()data:any
     ){
-        const result=await this.webhookService.sendCourseEventToClient(data,'create-course');
-        console.log(result);
+        const result=await this.webhookService.sendCourseEventToClient(data,'create-course',{});
         return result;
-        //return this.mathService.accumulate(data.data);
     }
 
     @UseGuards(JwtAuthGuard)

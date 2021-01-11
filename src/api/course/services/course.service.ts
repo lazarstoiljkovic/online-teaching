@@ -23,19 +23,16 @@ export class CourseService{
 
     async createCourse(courseDto:CourseDto, tutorId:number): Promise<Course>{
         console.log(tutorId);
-        //this.httpService.post('',{});
         const webhooks=await this.webhookCRUD.findWebhooksForEvent('course','create');
-        //console.log(webhooks);
 
         const array:any[]=webhooks.rows;
+        const course=await this.courseCRUD.createCourse(courseDto,tutorId);
 
-        array.forEach(async (row)=>{
-            const webhookDto:WebhookDto=row;
-            const result=await this.webhookService.sendCourseEventToClient(webhookDto,'create-course');
-            console.log(result);
-        });
+        console.log(array,course)
 
-        return this.courseCRUD.createCourse(courseDto,tutorId);
+        this.webhookService.sendToAllRegisteredClient(array,course);
+
+        return course;
     }
 
     async findAllCoursesForTutor(tutorId:number,paginationDto:PaginationDto):Promise<Course[]>{
@@ -55,7 +52,14 @@ export class CourseService{
     }
 
     async updateCourse(id:number,course:CourseDto){
-        return this.courseCRUD.updateCourse(id,course);
+        const webhooks=await this.webhookCRUD.findWebhooksForEvent('course','update');
+        const array:any[]=webhooks.rows;
+        const newCourse=this.courseCRUD.updateCourse(id,course);
+
+        await this.webhookService.sendToAllRegisteredClient(array,newCourse);
+
+
+        return newCourse;
     }
 
 }

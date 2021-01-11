@@ -6,18 +6,16 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService,private httpService:HttpService) {}
 
-  @MessagePattern({cmd: 'add' })
-  accumulate(data: number[]):number{
-    console.log(123456);
-    return (data || []).reduce((a, b) => a + b);
-  }
-
   @MessagePattern({cmd: 'courseEvent' })
   sendCourseEventToClient(data){
-    console.log('blablablablabla');
-    console.log(data);
-    this.httpService.post(data.url,data);
-    //console.log('blablablablabla');
+
+    try{
+      this.httpService.post(data.url,data).toPromise();
+    }
+    catch(error){
+      console.log(error);
+    }
+
     return {pera:"Pera"};
   }
 }
